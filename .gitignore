@@ -1,0 +1,4 @@
+src/packages
+src/DotNetAppSqlDb/bin
+src/DotNetAppSqlDb/obj
+src/.vs

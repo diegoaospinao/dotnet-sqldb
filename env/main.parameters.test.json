@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
       "prefix": {
-        "value": "dotnetsqldb"
+        "value": "netsq"
       },
       "environment": {
         "value": "test"
@@ -21,7 +21,7 @@
         "value": "Standard_LRS"
       },
       "appServicePlanSkuName": {
-        "value": "F1"
+        "value": "B1"
       }
     }
   }

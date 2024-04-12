@@ -84,6 +84,7 @@ resource privateSqlEndpoint 'Microsoft.Network/privateEndpoints@2023-09-01' = {
 resource privateSqlDnsZone 'Microsoft.Network/privateDnsZones@2020-06-01' =  {
   name: privateSqlDnsZoneName
   location: 'global'
+  properties: {}
 }
 
 resource privateSqlDnsZoneLink  'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = {
@@ -98,20 +99,20 @@ resource privateSqlDnsZoneLink  'Microsoft.Network/privateDnsZones/virtualNetwor
   }
 }
 
-// resource privateSqlDnsZoneGroup 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2023-09-01' = {
-//   parent: privateSqlEndpoint
-//   name: 'default'  
-//   properties: {
-//     privateDnsZoneConfigs: [
-//       {
-//         name: 'default'
-//         properties: {
-//           privateDnsZoneId: privateSqlDnsZone.id
-//         }
-//       }
-//     ]
-//   }
-// }
+resource privateSqlDnsZoneGroup 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2023-09-01' = {
+  parent: privateSqlEndpoint
+  name: 'default'  
+  properties: {
+    privateDnsZoneConfigs: [
+      {
+        name: 'default'
+        properties: {
+          privateDnsZoneId: privateSqlDnsZone.id
+        }
+      }
+    ]
+  }
+}
 
 
 // Outputs

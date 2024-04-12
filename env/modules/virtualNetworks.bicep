@@ -17,20 +17,20 @@ resource vNet 'Microsoft.Network/virtualNetworks@2023-09-01' = {
   properties: {
     addressSpace: {
       addressPrefixes: [
-        '10.0.0.0/16'
+        '10.1.0.0/16'
       ]
     }
     subnets: [
       {
         name: appGatewaySubnetName
         properties: {
-          addressPrefix: '10.0.0.0/24'
+          addressPrefix: '10.1.0.0/24'
         }
       }
       {
         name: backendSubnetName
         properties: {
-          addressPrefix: '10.0.1.0/24'
+          addressPrefix: '10.1.1.0/24'
           delegations: [
             {
               name: 'delegation'             
@@ -45,13 +45,13 @@ resource vNet 'Microsoft.Network/virtualNetworks@2023-09-01' = {
       {
         name: dataSubnetName
         properties: {
-          addressPrefix: '10.0.2.0/24'
+          addressPrefix: '10.1.2.0/24'
         }
       }
       {
         name: storageSubnetName
         properties: {
-          addressPrefix: '10.0.3.0/24'
+          addressPrefix: '10.1.3.0/24'
         }
       }
     ] 

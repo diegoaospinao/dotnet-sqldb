@@ -14,7 +14,10 @@ param appServicePlanName string
 param appServicePlanSkuName string
 
 @description('Application service name for frontend.')
-param appServiceName string 
+param appServiceName string
+
+@description('Existing subnet for application gateway.')
+param backendSubnetId string
 
 // Variables
 
@@ -31,6 +34,8 @@ resource appService 'Microsoft.Web/sites@2023-01-01' = {
   location: location
   properties: {
     serverFarmId: appServicePlan.id
+    virtualNetworkSubnetId: backendSubnetId
+    vnetRouteAllEnabled: true
     httpsOnly: true
   }
 }

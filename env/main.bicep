@@ -1,9 +1,13 @@
 // Parameters
+
 @description('Location for all resources.')
 param location string = resourceGroup().location
 
 @description('Prefix name')
 param prefix string
+
+@description('Suffix name')
+param suffix string = substring('${uniqueString(resourceGroup().id)}',0,6)
 
 @description('Environment for all resources.')
 @allowed([
@@ -52,37 +56,37 @@ param storageAccountSkuName string
 param appServicePlanSkuName string
 
 @description('Private sql endpoint name')
-param privateSqlEndpointName string = 'pe-${prefix}-sql-${environment}-${uniqueString(resourceGroup().id)}'
+param privateSqlEndpointName string = 'pe-${prefix}-sql-${environment}-${suffix}'
 
 @description('Private blob endpoint name')
-param privateBlobEndpointName string = 'pe-${prefix}-blob-${environment}-${uniqueString(resourceGroup().id)}'
+param privateBlobEndpointName string = 'pe-${prefix}-blob-${environment}-${suffix}'
 
 @description('Virtual network name related to application gateway.')
-param virtualNetworkName string = 'vnet-${prefix}-${environment}-${uniqueString(resourceGroup().id)}'
+param virtualNetworkName string = 'vnet-${prefix}-${environment}-${suffix}'
 
 @description('SQL logical server name.')
-param sqlServerName string = 'sql-${prefix}-${environment}-${uniqueString(resourceGroup().id)}'
+param sqlServerName string = 'sql-${prefix}-${environment}-${suffix}'
 
 @description('SQL database name.')
 param sqlDataBaseName string = 'sqldb-${prefix}-${environment}'
 
 @description('Azure storage account name.')
-param storageAccountName string = 'st${prefix}${environment}${uniqueString(resourceGroup().id)}'
+param storageAccountName string = 'st${prefix}${environment}${suffix}'
 
 @description('File share name. File share names must be between 3 and 63 characters in length and use numbers, lower-case letters and dash (-) only.')
 param fileShareName string = 'files'
 
 @description('Service plan name that contain application services.')
-param appServicePlanName string = 'asp-${prefix}-${environment}-${uniqueString(resourceGroup().id)}'
+param appServicePlanName string = 'asp-${prefix}-${environment}-${suffix}'
 
 @description('Application service name for backend.')
-param appServiceName string = 'app-${prefix}-backend-${environment}-${uniqueString(resourceGroup().id)}'
+param appServiceName string = 'app-${prefix}-backend-${environment}-${suffix}'
 
 @description('Privale link database name')
-param privateSqlDnsZoneName string = 'privatelink.${prefix}.${environment}.database.windows.net'
+param privateSqlDnsZoneName string = 'privatelink.database.windows.net'
 
 @description('Privale link storage account name')
-param privateBlobDnsZoneName string = 'privatelink.${prefix}.${environment}.blob.windows.net'
+param privateBlobDnsZoneName string = 'privatelink.blob.core.windows.net'
 
 // Modules
 
@@ -133,5 +137,6 @@ module appServices 'modules/appServices.bicep' = {
     appServicePlanName: appServicePlanName
     appServicePlanSkuName: appServicePlanSkuName
     location: location
+    backendSubnetId: virtualNetworks.outputs.backendSubnetId
   }
 }

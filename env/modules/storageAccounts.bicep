@@ -95,20 +95,20 @@ resource privateBlobDnsZoneLink 'Microsoft.Network/privateDnsZones/virtualNetwor
   }
 }
 
-// resource privateDnsZoneGroup 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2023-09-01' = {
-//   parent: privateBlobEndpoint
-//   name: 'default'
-//   properties: {
-//     privateDnsZoneConfigs: [
-//       {
-//         name: 'default'
-//         properties: {
-//           privateDnsZoneId: privateBlobDnsZone.id
-//         }
-//       }
-//     ]
-//   }
-// }
+resource privateDnsZoneGroup 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2023-09-01' = {
+  parent: privateBlobEndpoint
+  name: 'default'
+  properties: {
+    privateDnsZoneConfigs: [
+      {
+        name: 'default'
+        properties: {
+          privateDnsZoneId: privateBlobDnsZone.id
+        }
+      }
+    ]
+  }
+}
 
 // Outputs
 output id string = storageAccount.id
