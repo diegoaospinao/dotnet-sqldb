@@ -30,5 +30,5 @@ jobs:
       with:
         deploymentName: ${{ github.run_number }}
         resourceGroupName: ${{ env.AZURE_RESOURCEGROUP_NAME }}
-        template: ./main.bicep
-        parameters: ./main.parameters.test.json
+        template: ./env/main.bicep
+        parameters: ./env/main.parameters.test.json
