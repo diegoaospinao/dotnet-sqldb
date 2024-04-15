@@ -32,3 +32,4 @@ jobs:
         resourceGroupName: ${{ env.AZURE_RESOURCEGROUP_NAME }}
         template: ./env/main.bicep
         parameters: ./env/main.parameters.test.json
+        failOnStdErr: false
