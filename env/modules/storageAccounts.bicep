@@ -44,6 +44,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2023-01-01' = {
   }
   properties: {
     accessTier: 'Hot'
+    publicNetworkAccess: 'Disabled'
     networkAcls: {
       bypass: 'None'
       defaultAction: 'Deny'
