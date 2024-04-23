@@ -8,6 +8,9 @@
       "environment": {
         "value": "test"
       },
+      "managedIdentityName": {
+        "value": "id-netsql-test"
+      },
       "sqlServerAdminUser": {
         "value": "sqlAdmin"
       },

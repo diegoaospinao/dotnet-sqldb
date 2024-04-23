@@ -17,6 +17,9 @@ param suffix string = substring('${uniqueString(resourceGroup().id)}',0,6)
 ])
 param environment string
 
+@description('Existing managed identity name.')
+param managedIdentityName string
+
 @description('SQL logical server administrator username.')
 @secure()
 param sqlServerAdminUser string
@@ -138,5 +141,6 @@ module appServices 'modules/appServices.bicep' = {
     appServicePlanSkuName: appServicePlanSkuName
     location: location
     backendSubnetId: virtualNetworks.outputs.backendSubnetId
+    managedIdentityName: managedIdentityName
   }
 }

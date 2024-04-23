@@ -19,7 +19,11 @@ param appServiceName string
 @description('Existing subnet for application gateway.')
 param backendSubnetId string
 
+@description('Existing managed identity name.')
+param managedIdentityName string
+
 // Variables
+var managedIdentityId = resourceId('Microsoft.ManagedIdentity/userAssignedIdentities',managedIdentityName)
 
 resource appServicePlan 'Microsoft.Web/serverfarms@2023-01-01' = {
   name: appServicePlanName
@@ -32,6 +36,12 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2023-01-01' = {
 resource appService 'Microsoft.Web/sites@2023-01-01' = {
   name: appServiceName
   location: location
+  identity: {
+    type: 'UserAssigned'
+    userAssignedIdentities: {
+      '${managedIdentityId}' : {}
+    }
+  }
   properties: {
     serverFarmId: appServicePlan.id
     virtualNetworkSubnetId: backendSubnetId
