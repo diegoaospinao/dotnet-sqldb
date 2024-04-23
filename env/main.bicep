@@ -129,6 +129,7 @@ module storageAccounts 'modules/storageAccounts.bicep' = {
     privateBlobDnsZoneName: privateBlobDnsZoneName
     virtualNetworkId: virtualNetworks.outputs.virtualNetworkId
     storageSubnetId: virtualNetworks.outputs.storageSubnetId
+    managedIdentityName: managedIdentityName
   }
   dependsOn: [virtualNetworks]
 }

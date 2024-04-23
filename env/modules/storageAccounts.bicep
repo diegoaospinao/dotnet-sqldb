@@ -33,7 +33,12 @@ param storageSubnetId string
 @description('Existing subnet for application gateway.')
 param virtualNetworkId string
 
+@description('Existing managed identity name.')
+param managedIdentityName string
+
 // Variables
+var managedIdentityId = resourceId('Microsoft.ManagedIdentity/userAssignedIdentities',managedIdentityName)
+var roleDefinitionId = resourceId('Microsoft.Authorization/roleDefinitions', 'b7e6dc6d-f1e8-4753-8033-0f276bb0955b')
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2023-01-01' = {
   name: storageAccountName
@@ -108,6 +113,16 @@ resource privateDnsZoneGroup 'Microsoft.Network/privateEndpoints/privateDnsZoneG
         }
       }
     ]
+  }
+}
+
+resource roleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  scope: storageAccount
+  name: guid(storageAccount.id, managedIdentityId, roleDefinitionId)
+  properties: {
+    roleDefinitionId: roleDefinitionId
+    principalId: managedIdentityId
+    principalType: 'ServicePrincipal'
   }
 }
 
