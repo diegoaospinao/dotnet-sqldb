@@ -64,6 +64,9 @@ param appServicePlanSkuName string
 @description('Private sql endpoint name')
 param privateSqlEndpointName string = 'pe-${prefix}-sql-${environment}-${suffix}'
 
+@description('Private sql endpoint name')
+param privateSqlEndpointReplicaName string = 'pe-${prefix}-sql-${environment}-replica-${suffix}'
+
 @description('Private blob endpoint name')
 param privateBlobEndpointName string = 'pe-${prefix}-blob-${environment}-${suffix}'
 
@@ -122,6 +125,7 @@ module sqlDatabases 'modules/sqlDatabases.bicep' = {
     dataSubnetId: virtualNetworks.outputs.dataSubnetId
     locationReplica: locationReplica
     sqlServerReplicaName: sqlServerReplicaName
+    privateSqlEndpointReplicaName: privateSqlEndpointReplicaName
   }
   dependsOn: [virtualNetworks]
 }
