@@ -116,15 +116,15 @@ resource privateDnsZoneGroup 'Microsoft.Network/privateEndpoints/privateDnsZoneG
   }
 }
 
-resource roleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  scope: storageAccount
-  name: guid(storageAccount.id, managedIdentityId, roleDefinitionId)
-  properties: {
-    roleDefinitionId: roleDefinitionId
-    principalId: managedIdentityId
-    principalType: 'ServicePrincipal'
-  }
-}
+// resource roleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+//   scope: storageAccount
+//   name: guid(storageAccount.id, managedIdentityId, roleDefinitionId)
+//   properties: {
+//     roleDefinitionId: roleDefinitionId
+//     principalId: managedIdentityId
+//     principalType: 'ServicePrincipal'
+//   }
+// }
 
 // Outputs
 output id string = storageAccount.id

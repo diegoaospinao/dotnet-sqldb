@@ -2,8 +2,14 @@
 @description('Location for all resources.')
 param location string
 
+@description('Location for all resources.')
+param locationReplica string
+
 @description('SQL logical server name.')
 param sqlServerName string 
+
+@description('SQL logical server name.')
+param sqlServerReplicaName string 
 
 @description('SQL logical server administrator username.')
 @secure()
@@ -50,12 +56,35 @@ resource sqlServer 'Microsoft.Sql/servers@2023-05-01-preview' = {
   }
 }
 
+resource sqlServerReplica 'Microsoft.Sql/servers@2023-05-01-preview' = {
+  name: sqlServerReplicaName
+  location: locationReplica
+  properties: {
+    administratorLogin: sqlServerAdminUser
+    administratorLoginPassword: sqlServerAdminPassword
+    publicNetworkAccess: 'Disabled'
+  }
+}
+
 resource sqlDataBase 'Microsoft.Sql/servers/databases@2023-05-01-preview' = {
   parent: sqlServer
   name: sqlDataBaseName
   location: location
   sku: {
     name: sqlDataBaseSkuName
+  }
+}
+
+resource sqlDataBaseReplica 'Microsoft.Sql/servers/databases@2023-05-01-preview' = {
+  parent: sqlServerReplica
+  name: sqlDataBaseName
+  location: locationReplica
+  sku: {
+    name: sqlDataBaseSkuName
+  }
+  properties:{
+    createMode: 'Secondary'
+    sourceDatabaseId: sqlDataBase.id
   }
 }
 
@@ -72,6 +101,15 @@ resource privateSqlEndpoint 'Microsoft.Network/privateEndpoints@2023-09-01' = {
         name: privateSqlEndpointName
         properties: {
           privateLinkServiceId: sqlServer.id
+          groupIds: [
+            'sqlServer'
+          ]
+        }
+      }
+      {
+        name: '${privateSqlEndpointName}-replica'
+        properties: {
+          privateLinkServiceId: sqlServerReplica.id
           groupIds: [
             'sqlServer'
           ]

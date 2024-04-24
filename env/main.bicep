@@ -3,6 +3,9 @@
 @description('Location for all resources.')
 param location string = resourceGroup().location
 
+@description('Location for all resources.')
+param locationReplica string = 'southcentralus'
+
 @description('Prefix name')
 param prefix string
 
@@ -70,6 +73,9 @@ param virtualNetworkName string = 'vnet-${prefix}-${environment}-${suffix}'
 @description('SQL logical server name.')
 param sqlServerName string = 'sql-${prefix}-${environment}-${suffix}'
 
+@description('SQL logical server name.')
+param sqlServerReplicaName string = 'sql-${prefix}-${environment}-replica-${suffix}'
+
 @description('SQL database name.')
 param sqlDataBaseName string = 'sqldb-${prefix}-${environment}'
 
@@ -114,6 +120,8 @@ module sqlDatabases 'modules/sqlDatabases.bicep' = {
     privateSqlDnsZoneName: privateSqlDnsZoneName
     virtualNetworkId: virtualNetworks.outputs.virtualNetworkId
     dataSubnetId: virtualNetworks.outputs.dataSubnetId
+    locationReplica: locationReplica
+    sqlServerReplicaName: sqlServerReplicaName
   }
   dependsOn: [virtualNetworks]
 }
