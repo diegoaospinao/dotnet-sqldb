@@ -67,8 +67,8 @@ param privateSqlEndpointName string = 'pe-${prefix}-sql-${environment}-${suffix}
 @description('Private sql endpoint name')
 param privateSqlEndpointReplicaName string = 'pe-${prefix}-sql-${environment}-replica-${suffix}'
 
-@description('Private blob endpoint name')
-param privateBlobEndpointName string = 'pe-${prefix}-blob-${environment}-${suffix}'
+@description('Private file endpoint name')
+param privateFileEndpointName string = 'pe-${prefix}-file-${environment}-${suffix}'
 
 @description('Virtual network name related to application gateway.')
 param virtualNetworkName string = 'vnet-${prefix}-${environment}-${suffix}'
@@ -98,7 +98,7 @@ param appServiceName string = 'app-${prefix}-backend-${environment}-${suffix}'
 param privateSqlDnsZoneName string = 'privatelink.database.windows.net'
 
 @description('Privale link storage account name')
-param privateBlobDnsZoneName string = 'privatelink.blob.core.windows.net'
+param privateFileDnsZoneName string = 'privatelink.file.core.windows.net'
 
 // Modules
 
@@ -138,8 +138,8 @@ module storageAccounts 'modules/storageAccounts.bicep' = {
     location: location
     storageAccountName: storageAccountName 
     storageAccountSkuName: storageAccountSkuName
-    privateBlobEndpointName:privateBlobEndpointName
-    privateBlobDnsZoneName: privateBlobDnsZoneName
+    privateFileEndpointName:privateFileEndpointName
+    privateFileDnsZoneName: privateFileDnsZoneName
     virtualNetworkId: virtualNetworks.outputs.virtualNetworkId
     storageSubnetId: virtualNetworks.outputs.storageSubnetId
     managedIdentityName: managedIdentityName

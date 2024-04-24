@@ -22,10 +22,10 @@ param storageAccountSkuName string
 param fileShareName string
 
 @description('Private endpoint name')
-param privateBlobEndpointName string
+param privateFileEndpointName string
 
 @description('Private sql dns zone name')
-param privateBlobDnsZoneName string
+param privateFileDnsZoneName string
 
 @description('Existing subnet for application gateway.')
 param storageSubnetId string
@@ -61,21 +61,21 @@ resource fileShare 'Microsoft.Storage/storageAccounts/fileServices/shares@2023-0
   name: '${storageAccount.name}/default/${fileShareName}'
 }
 
-resource privateBlobEndpoint 'Microsoft.Network/privateEndpoints@2023-09-01' = {
-  name: privateBlobEndpointName
+resource privateFileEndpoint 'Microsoft.Network/privateEndpoints@2023-09-01' = {
+  name: privateFileEndpointName
   location: location
   properties: {
     subnet: {
       id: storageSubnetId
     }
-    customNetworkInterfaceName: '${privateBlobEndpointName}-nic'
+    customNetworkInterfaceName: '${privateFileEndpointName}-nic'
     privateLinkServiceConnections: [
       {
-        name: privateBlobEndpointName
+        name: privateFileEndpointName
         properties: {
           privateLinkServiceId: storageAccount.id
           groupIds: [
-            'blob'
+            'file'
           ]
         }
       }
@@ -83,15 +83,15 @@ resource privateBlobEndpoint 'Microsoft.Network/privateEndpoints@2023-09-01' = {
   }
 }
 
-resource privateBlobDnsZone 'Microsoft.Network/privateDnsZones@2020-06-01' = {
-  name: privateBlobDnsZoneName
+resource privateFileDnsZone 'Microsoft.Network/privateDnsZones@2020-06-01' = {
+  name: privateFileDnsZoneName
   location: 'global'
   properties: {}
 }
 
-resource privateBlobDnsZoneLink 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = {
-  parent: privateBlobDnsZone
-  name: '${privateBlobDnsZoneName}-link'
+resource privateFileDnsZoneLink 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = {
+  parent: privateFileDnsZone
+  name: '${privateFileDnsZoneName}-link'
   location: 'global'
   properties: {
     registrationEnabled: false
@@ -102,14 +102,14 @@ resource privateBlobDnsZoneLink 'Microsoft.Network/privateDnsZones/virtualNetwor
 }
 
 resource privateDnsZoneGroup 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2023-09-01' = {
-  parent: privateBlobEndpoint
+  parent: privateFileEndpoint
   name: 'default'
   properties: {
     privateDnsZoneConfigs: [
       {
         name: 'default'
         properties: {
-          privateDnsZoneId: privateBlobDnsZone.id
+          privateDnsZoneId: privateFileDnsZone.id
         }
       }
     ]
