@@ -118,7 +118,7 @@ resource privateSqlEndpoint 'Microsoft.Network/privateEndpoints@2023-09-01' = {
 
 resource privateSqlEndpointReplica 'Microsoft.Network/privateEndpoints@2023-09-01' = {
   name: privateSqlEndpointReplicaName
-  location: locationReplica
+  location: location
   properties: {
     subnet: {
       id: dataReplicaSubnetId
