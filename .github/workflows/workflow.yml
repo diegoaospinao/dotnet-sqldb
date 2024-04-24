@@ -1,13 +1,11 @@
 name: netsql-cd
 concurrency: netsql-cd
 
-# on: 
-#   workflow_dispatch:
-
 on:
- push:
-   branches:
-     - main
+  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 permissions:
   id-token: write
