@@ -4,7 +4,7 @@
 param location string = resourceGroup().location
 
 @description('Location for all resources.')
-param locationReplica string = 'southcentralus'
+param locationReplica string = 'westus'
 
 @description('Prefix name')
 param prefix string
@@ -126,6 +126,7 @@ module sqlDatabases 'modules/sqlDatabases.bicep' = {
     locationReplica: locationReplica
     sqlServerReplicaName: sqlServerReplicaName
     privateSqlEndpointReplicaName: privateSqlEndpointReplicaName
+    dataReplicaSubnetId: virtualNetworks.outputs.dataReplicaSubnetId
   }
   dependsOn: [virtualNetworks]
 }

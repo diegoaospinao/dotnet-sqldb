@@ -9,6 +9,7 @@ param virtualNetworkName string
 var appGatewaySubnetName = 'agsubnet'
 var backendSubnetName = 'backendsubnet'
 var dataSubnetName = 'datasubnet'
+var dataReplicaSubnetName = 'datareplicasubnet'
 var storageSubnetName = 'storagesubnet'
 
 resource vNet 'Microsoft.Network/virtualNetworks@2023-09-01' = {
@@ -49,9 +50,15 @@ resource vNet 'Microsoft.Network/virtualNetworks@2023-09-01' = {
         }
       }
       {
-        name: storageSubnetName
+        name: dataReplicaSubnetName
         properties: {
           addressPrefix: '10.1.3.0/24'
+        }
+      }
+      {
+        name: storageSubnetName
+        properties: {
+          addressPrefix: '10.1.4.0/24'
         }
       }
     ] 
@@ -69,6 +76,10 @@ resource vNet 'Microsoft.Network/virtualNetworks@2023-09-01' = {
     name: dataSubnetName
   }
 
+  resource dataReplicaSubnet 'subnets' existing = {
+    name: dataReplicaSubnetName
+  }
+
   resource storageSubnet 'subnets' existing = {
     name: storageSubnetName
   }
@@ -83,5 +94,7 @@ output backendSubnetId string = vNet::backendSubnet.id
 output backendSubnetName string = vNet::backendSubnet.name
 output dataSubnetId string = vNet::dataSubnet.id
 output dataSubnetName string = vNet::dataSubnet.name
+output dataReplicaSubnetId string = vNet::dataReplicaSubnet.id
+output dataReplicaSubnetName string = vNet::dataReplicaSubnet.name
 output storageSubnetId string = vNet::storageSubnet.id
 output storageSubnetName string = vNet::storageSubnet.name

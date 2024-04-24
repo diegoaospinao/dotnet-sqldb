@@ -44,6 +44,9 @@ param privateSqlDnsZoneName string
 param dataSubnetId string
 
 @description('Existing subnet for application gateway.')
+param dataReplicaSubnetId string
+
+@description('Existing subnet for application gateway.')
 param virtualNetworkId string
 
 // Variables
@@ -118,7 +121,7 @@ resource privateSqlEndpointReplica 'Microsoft.Network/privateEndpoints@2023-09-0
   location: locationReplica
   properties: {
     subnet: {
-      id: dataSubnetId
+      id: dataReplicaSubnetId
     }
     customNetworkInterfaceName: '${privateSqlEndpointReplicaName}-nic'
     privateLinkServiceConnections: [
