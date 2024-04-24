@@ -34,6 +34,9 @@ param sqlDataBaseSkuName string
 @description('Private endpoint name')
 param privateSqlEndpointName string
 
+@description('Private endpoint name')
+param privateSqlEndpointReplicaName string
+
 @description('Private sql dns zone name')
 param privateSqlDnsZoneName string
 
@@ -106,8 +109,21 @@ resource privateSqlEndpoint 'Microsoft.Network/privateEndpoints@2023-09-01' = {
           ]
         }
       }
+    ]
+  }
+}
+
+resource privateSqlEndpointReplica 'Microsoft.Network/privateEndpoints@2023-09-01' = {
+  name: privateSqlEndpointReplicaName
+  location: locationReplica
+  properties: {
+    subnet: {
+      id: dataSubnetId
+    }
+    customNetworkInterfaceName: '${privateSqlEndpointReplicaName}-nic'
+    privateLinkServiceConnections: [
       {
-        name: '${privateSqlEndpointName}-replica'
+        name: privateSqlEndpointReplicaName
         properties: {
           privateLinkServiceId: sqlServerReplica.id
           groupIds: [
@@ -139,6 +155,21 @@ resource privateSqlDnsZoneLink  'Microsoft.Network/privateDnsZones/virtualNetwor
 
 resource privateSqlDnsZoneGroup 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2023-09-01' = {
   parent: privateSqlEndpoint
+  name: 'default'  
+  properties: {
+    privateDnsZoneConfigs: [
+      {
+        name: 'default'
+        properties: {
+          privateDnsZoneId: privateSqlDnsZone.id
+        }
+      }
+    ]
+  }
+}
+
+resource privateSqlDnsZoneGroupReplica 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2023-09-01' = {
+  parent: privateSqlEndpointReplica
   name: 'default'  
   properties: {
     privateDnsZoneConfigs: [
