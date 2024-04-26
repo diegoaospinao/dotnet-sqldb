@@ -1,11 +1,11 @@
-name: netsql-cd
-concurrency: netsql-cd
+name: deploy-resources
+concurrency: deploy-resources
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
+  # push:
+  #   branches:
+  #     - main
 
 permissions:
   id-token: write
@@ -13,10 +13,37 @@ permissions:
 
 env:
   AZURE_RESOURCEGROUP_NAME: rg-netsql
+  TEMPLATE_FILE: ./env/main.bicep
+  PARAMETER_FILE: ./env/main.parameters.json
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build bicep
+      run: az bicep build --file ${{ env.TEMPLATE_FILE }}
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: azure/login@v1
+      name: Sign in to azure
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+    - uses: azure/arm-deploy@v1
+      name: Validate bicep
+      with:
+        resourceGroupName: ${{ env.AZURE_RESOURCEGROUP_NAME }}
+        template: ${{ env.TEMPLATE_FILE }}
+        parameters: ${{ env.PARAMETER_FILE }}
+        deploymentMode: Validate
   deploy:
     runs-on: ubuntu-latest
+    environment: unique
+    needs: [build, validate]
     steps:
     - uses: actions/checkout@v3
     - uses: azure/login@v1
@@ -28,6 +55,6 @@ jobs:
       with:
         deploymentName: ${{ github.run_number }}
         resourceGroupName: ${{ env.AZURE_RESOURCEGROUP_NAME }}
-        template: ./env/main.bicep
-        parameters: ./env/main.parameters.test.json
+        template: ${{ env.TEMPLATE_FILE }}
+        parameters: ${{ env.PARAMETER_FILE }}
         failOnStdErr: false
