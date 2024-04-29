@@ -18,13 +18,13 @@
         "value": "v?k[D$00k7u^"
       },
       "sqlDataBaseSkuName": {
-        "value": "F1"
+        "value": "Basic"
       },
       "storageAccountSkuName": {
         "value": "Standard_LRS"
       },
       "appServicePlanSkuName": {
-        "value": "B1"
+        "value": "F1"
       }
     }
   }
