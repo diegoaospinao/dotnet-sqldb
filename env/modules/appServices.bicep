@@ -44,7 +44,7 @@ resource appService 'Microsoft.Web/sites@2023-01-01' = {
   }
   properties: {
     serverFarmId: appServicePlan.id
-    virtualNetworkSubnetId: backendSubnetId
+    // virtualNetworkSubnetId: backendSubnetId
     vnetRouteAllEnabled: true
     httpsOnly: true
   }

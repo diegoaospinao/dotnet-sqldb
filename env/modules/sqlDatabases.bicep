@@ -62,15 +62,15 @@ resource sqlServer 'Microsoft.Sql/servers@2023-05-01-preview' = {
   }
 }
 
-resource sqlServerReplica 'Microsoft.Sql/servers@2023-05-01-preview' = {
-  name: sqlServerReplicaName
-  location: locationReplica
-  properties: {
-    administratorLogin: sqlServerAdminUser
-    administratorLoginPassword: sqlServerAdminPassword
-    publicNetworkAccess: 'Disabled'
-  }
-}
+// resource sqlServerReplica 'Microsoft.Sql/servers@2023-05-01-preview' = {
+//   name: sqlServerReplicaName
+//   location: locationReplica
+//   properties: {
+//     administratorLogin: sqlServerAdminUser
+//     administratorLoginPassword: sqlServerAdminPassword
+//     publicNetworkAccess: 'Disabled'
+//   }
+// }
 
 resource sqlDataBase 'Microsoft.Sql/servers/databases@2023-05-01-preview' = {
   parent: sqlServer
@@ -81,18 +81,18 @@ resource sqlDataBase 'Microsoft.Sql/servers/databases@2023-05-01-preview' = {
   }
 }
 
-resource sqlDataBaseReplica 'Microsoft.Sql/servers/databases@2023-05-01-preview' = {
-  parent: sqlServerReplica
-  name: sqlDataBaseName
-  location: locationReplica
-  sku: {
-    name: sqlDataBaseSkuName
-  }
-  properties:{
-    createMode: 'Secondary'
-    sourceDatabaseId: sqlDataBase.id
-  }
-}
+// resource sqlDataBaseReplica 'Microsoft.Sql/servers/databases@2023-05-01-preview' = {
+//   parent: sqlServerReplica
+//   name: sqlDataBaseName
+//   location: locationReplica
+//   sku: {
+//     name: sqlDataBaseSkuName
+//   }
+//   properties:{
+//     createMode: 'Secondary'
+//     sourceDatabaseId: sqlDataBase.id
+//   }
+// }
 
 resource privateSqlEndpoint 'Microsoft.Network/privateEndpoints@2023-09-01' = {
   name: privateSqlEndpointName
@@ -116,27 +116,27 @@ resource privateSqlEndpoint 'Microsoft.Network/privateEndpoints@2023-09-01' = {
   }
 }
 
-resource privateSqlEndpointReplica 'Microsoft.Network/privateEndpoints@2023-09-01' = {
-  name: privateSqlEndpointReplicaName
-  location: location
-  properties: {
-    subnet: {
-      id: dataReplicaSubnetId
-    }
-    customNetworkInterfaceName: '${privateSqlEndpointReplicaName}-nic'
-    privateLinkServiceConnections: [
-      {
-        name: privateSqlEndpointReplicaName
-        properties: {
-          privateLinkServiceId: sqlServerReplica.id
-          groupIds: [
-            'sqlServer'
-          ]
-        }
-      }
-    ]
-  }
-}
+// resource privateSqlEndpointReplica 'Microsoft.Network/privateEndpoints@2023-09-01' = {
+//   name: privateSqlEndpointReplicaName
+//   location: location
+//   properties: {
+//     subnet: {
+//       id: dataReplicaSubnetId
+//     }
+//     customNetworkInterfaceName: '${privateSqlEndpointReplicaName}-nic'
+//     privateLinkServiceConnections: [
+//       {
+//         name: privateSqlEndpointReplicaName
+//         properties: {
+//           privateLinkServiceId: sqlServerReplica.id
+//           groupIds: [
+//             'sqlServer'
+//           ]
+//         }
+//       }
+//     ]
+//   }
+// }
 
 resource privateSqlDnsZone 'Microsoft.Network/privateDnsZones@2020-06-01' =  {
   name: privateSqlDnsZoneName
@@ -171,20 +171,20 @@ resource privateSqlDnsZoneGroup 'Microsoft.Network/privateEndpoints/privateDnsZo
   }
 }
 
-resource privateSqlDnsZoneGroupReplica 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2023-09-01' = {
-  parent: privateSqlEndpointReplica
-  name: 'default'  
-  properties: {
-    privateDnsZoneConfigs: [
-      {
-        name: 'default'
-        properties: {
-          privateDnsZoneId: privateSqlDnsZone.id
-        }
-      }
-    ]
-  }
-}
+// resource privateSqlDnsZoneGroupReplica 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2023-09-01' = {
+//   parent: privateSqlEndpointReplica
+//   name: 'default'  
+//   properties: {
+//     privateDnsZoneConfigs: [
+//       {
+//         name: 'default'
+//         properties: {
+//           privateDnsZoneId: privateSqlDnsZone.id
+//         }
+//       }
+//     ]
+//   }
+// }
 
 
 // Outputs
