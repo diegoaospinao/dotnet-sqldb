@@ -2,10 +2,10 @@ name: deploy-resources
 concurrency: deploy-resources
 
 on:
-  workflow_dispatch:
-  # push:
-  #   branches:
-  #     - main
+  #workflow_dispatch:
+  push:
+    branches:
+      - main
 
 permissions:
   id-token: write

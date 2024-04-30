@@ -47,6 +47,46 @@ resource appService 'Microsoft.Web/sites@2023-01-01' = {
     // virtualNetworkSubnetId: backendSubnetId
     vnetRouteAllEnabled: true
     httpsOnly: true
+    siteConfig: {
+      appSettings:[
+        {
+          name: 'DiagnosticServices_EXTENSION_VERSION'
+          value: '~3'
+        }
+        {
+          name: 'InstrumentationEngine_EXTENSION_VERSION'
+          value: 'disabled'
+        }
+        {
+          name: 'SnapshotDebugger_EXTENSION_VERSION'
+          value: 'disabled'
+        }
+        {
+          name: 'WEBSITE_RUN_FROM_PACKAGE'
+          value: '1'
+        }
+        {
+          name: 'XDT_MicrosoftApplicationInsights_BaseExtensions'
+          value: 'disabled'
+        }
+        {
+          name: 'XDT_MicrosoftApplicationInsights_Java'
+          value: '1'
+        }
+        {
+          name: 'XDT_MicrosoftApplicationInsights_Mode'
+          value: 'recommended'
+        }
+        {
+          name: 'XDT_MicrosoftApplicationInsights_NodeJS'
+          value: '1'
+        }
+        {
+          name: 'XDT_MicrosoftApplicationInsights_PreemptSdk'
+          value: 'disabled'
+        }
+      ]
+    }
   }
 }
 
