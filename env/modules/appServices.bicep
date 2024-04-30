@@ -37,7 +37,7 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2023-01-01' = {
 resource appService 'Microsoft.Web/sites@2023-01-01' = {
   name: appServiceName
   location: location
-  kind: 'linux'
+  kind: 'linux,api'
   identity: {
     type: 'UserAssigned'
     userAssignedIdentities: {
@@ -50,6 +50,7 @@ resource appService 'Microsoft.Web/sites@2023-01-01' = {
     vnetRouteAllEnabled: true
     httpsOnly: true
     siteConfig: {
+      linuxFxVersion: 'DOTNETCORE|8.0'
       appSettings:[
         {
           name: 'DiagnosticServices_EXTENSION_VERSION'
