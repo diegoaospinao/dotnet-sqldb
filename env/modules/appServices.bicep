@@ -31,11 +31,13 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2023-01-01' = {
   sku: {
     name: appServicePlanSkuName
   }
+  kind: 'linux'
 }
 
 resource appService 'Microsoft.Web/sites@2023-01-01' = {
   name: appServiceName
   location: location
+  kind: 'linux'
   identity: {
     type: 'UserAssigned'
     userAssignedIdentities: {
